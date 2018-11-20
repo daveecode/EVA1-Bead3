@@ -12,10 +12,10 @@ public:
 
     enum Player { NoPlayer, XPlayer, OPlayer, None };
 
-    explicit TicTacToeModel(DataUi *dataAccess);
+    explicit TicTacToeModel(DataUi *dataAccess, int columns = 10, int rows = 6);
     virtual ~TicTacToeModel(); //nem feltétlen kell definiálni
 
-    void newGame(); //új játék létrehozása
+    void newGame(int c, int r); //új játék létrehozása
     void stepGame(int x, int y); // játék léptetése
     bool loadGame(int gameIndex); // játék betöltése
     bool saveGame(int gameIndex); // játék mentése

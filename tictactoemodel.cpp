@@ -1,15 +1,17 @@
 #include "tictactoemodel.h"
 
-TicTacToeModel::TicTacToeModel(DataUi *dataAccess)
+TicTacToeModel::TicTacToeModel(DataUi *dataAccess, int columns, int rows)
 {
 
     _dataAccess = dataAccess;
+    tableColumns = columns;
+    tableRows = rows;
 
-    gameTable = new Player*[8];
+    gameTable = new Player*[tableColumns];
 
-    for(int i = 0; i < 8; ++i) {
+    for(int i = 0; i < tableColumns; ++i) {
 
-        gameTable[i] = new Player[5];
+        gameTable[i] = new Player[tableRows];
     }
 }
 
@@ -18,11 +20,26 @@ TicTacToeModel::~TicTacToeModel()
     delete[] gameTable;
 }
 
-void TicTacToeModel::newGame()
+void TicTacToeModel::newGame(int c, int r)
 {
-    for(int i = 0; i < 8; ++i) {
 
-        for(int j = 0; j < 5; ++j) {
+    if(tableColumns != c || tableRows != r) {
+
+        delete[] gameTable;
+        tableColumns = c;
+        tableRows = r;
+
+        gameTable = new Player*[tableColumns];
+
+        for(int i = 0; i < tableColumns; ++i) {
+
+            gameTable[i] = new Player[tableRows];
+        }
+    }
+
+    for(int i = 0; i < tableColumns; ++i) {
+
+        for(int j = 0; j < tableRows; ++j) {
 
             gameTable[i][j] = TicTacToeModel::NoPlayer;
         }
@@ -30,22 +47,23 @@ void TicTacToeModel::newGame()
 
     steps = 0;
     current = TicTacToeModel::XPlayer;
-
-
 }
 
 void TicTacToeModel::stepGame(int x, int y)
 {
-    if(steps >= 40) {
+    if(steps >= tableColumns * tableRows) {
+
         return;
     }
 
 
     if(getField(x,y) == TicTacToeModel::None) {
+
         return;
     }
 
     if(gameTable[x][y] != 0) {
+
         return;
     }
 
@@ -54,7 +72,7 @@ void TicTacToeModel::stepGame(int x, int y)
     current = (Player)(current % 2 + 1);
     steps++;*/
 
-    for(int i = 4; i > -1; --i) {
+    for(int i = tableRows - 1; i > -1; --i) {
 
         if(getField(x,i) == TicTacToeModel::NoPlayer) {
 
@@ -74,9 +92,9 @@ void TicTacToeModel::checkGame()
 
     int n = 0;
 
-    while(n < 5) {
+    while(n < tableRows) {
 
-        for(int i = 0; i < 8; ++i) {
+        for(int i = 0; i < tableColumns; ++i) {
 
             if(getField(i,n) != TicTacToeModel::NoPlayer && getField(i,n) == getField(i+1,n) && getField(i,n) == getField(i+2,n) && getField(i,n) == getField(i+3,n)) {
 
@@ -92,11 +110,16 @@ void TicTacToeModel::checkGame()
         gameWon(winner);
     }
 
+    if(steps >= tableColumns * tableRows) {
+
+        gameOver();
+    }
+
 }
 
 TicTacToeModel::Player TicTacToeModel::getField(int x, int y) const
 {
-    if(x < 0 || x > 7 || y < 0 || y > 4) {
+    if(x < 0 || x > tableColumns - 1 || y < 0 || y > tableRows - 1) {
 
         return TicTacToeModel::None;
     }
@@ -121,11 +144,11 @@ bool TicTacToeModel::loadGame(int gameIndex)
     steps = saveGameData[0];
     current = (Player)saveGameData[1];
 
-    for(int i = 0; i < 8; ++i) {
+    for(int i = 0; i < tableColumns; ++i) {
 
-        for(int j = 0; j < 5; ++j) {
+        for(int j = 0; j < tableRows; ++j) {
 
-            gameTable[i][j] = (Player)saveGameData[2+i*8+j];
+            gameTable[i][j] = (Player)saveGameData[2+i*tableColumns+j];
         }
     }
 
@@ -142,9 +165,9 @@ bool TicTacToeModel::saveGame(int gameIndex)
     saveGameData.push_back(steps);
     saveGameData.push_back((int)current);
 
-    for(int i = 0; i < 8; ++i) {
+    for(int i = 0; i < tableColumns; ++i) {
 
-        for(int j = 0; j < 5; ++j) {
+        for(int j = 0; j < tableRows; ++j) {
 
             saveGameData.push_back((int)gameTable[i][j]);
         }

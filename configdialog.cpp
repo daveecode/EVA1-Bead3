@@ -2,7 +2,7 @@
 
 ConfigDialog::ConfigDialog(QWidget *parent) : QDialog(parent)
 {
-
+    setModal(true);
     setFixedSize(310, 200);
     setWindowTitle(trUtf8("Potyogós amőba - Beállítások"));
 
@@ -67,20 +67,20 @@ void ConfigDialog::setSize()
 {
     if(size() == 1) {
 
-       // _model.tableColumns = 8;
-       // _model.tableRows = 5;
+       row = 5;
+       col = 8;
     }
 
     else if(size() == 2) {
 
-       // _model.tableColumns = 10;
-       // _model.tableRows = 6;
+       row = 6;
+       col = 10;
     }
 
     else if(size() == 3) {
 
-       // _model.tableColumns = 12;
-        //_model.tableRows = 7;
+       row = 7;
+       col = 12;
     }
 
     else {
@@ -90,6 +90,16 @@ void ConfigDialog::setSize()
     }
 
     isValid();
+}
+
+int ConfigDialog::columns()
+{
+    return col;
+}
+
+int ConfigDialog::rows()
+{
+    return row;
 }
 
 void ConfigDialog::setFirstPlayerName()
@@ -106,7 +116,7 @@ void ConfigDialog::setSecondPlayerName()
 
 bool ConfigDialog::isValid()
 {
-    if(firstLineEdit->text() != 0 && secondLineEdit != 0 && box->currentIndex() != 0) {
+    if(firstLineEdit->text().length() != 0 && secondLineEdit->text().length() != 0 && box->currentIndex() != 0) {
 
         okButton->setEnabled(true);
         return true;

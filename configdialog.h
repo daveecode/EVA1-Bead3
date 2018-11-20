@@ -19,6 +19,8 @@ public:
 
     QString firstPlayerName(); // első játékos neve
     QString secondPlayerName(); // második játékos neve
+    int rows();
+    int columns();
     int size();
 
 public slots:
@@ -42,7 +44,8 @@ private:
     QHBoxLayout *player1;
     QHBoxLayout *player2;
     QHBoxLayout *buttons;
-
+    int col;
+    int row;
     QVBoxLayout *main;
     //TicTacToeModel _model;
 
