@@ -98,15 +98,44 @@ void TicTacToeModel::checkGame()
             if(getField(i,n) != TicTacToeModel::NoPlayer && getField(i,n) == getField(i+1,n) && getField(i,n) == getField(i+2,n) && getField(i,n) == getField(i+3,n)) {
 
                 winner = getField(i,n);
+                gameWon(winner);
+                return;
+            }
+
+            if(getField(i,n) != TicTacToeModel::NoPlayer && getField(i,n) == getField(i + 1, n + 1) && getField(i + 2, n + 2) == getField(i,n) &&
+                    getField(i,n) == getField(i+3, n + 3)) {
+
+                winner = getField(i,n);
+                gameWon(winner);
+                return;
+            }
+
+            if(getField(i,n) != TicTacToeModel::NoPlayer && getField(i,n) == getField(i + 1, n - 1) && getField(i + 2, n - 2) == getField(i,n) &&
+                    getField(i,n) == getField(i+3, n - 3)) {
+
+                winner = getField(i,n);
+                gameWon(winner);
+                return;
+            }
+
+            if(getField(i,n) != TicTacToeModel::NoPlayer && getField(i,n) == getField(i - 1, n - 1) && getField(i - 2, n - 2) == getField(i,n) &&
+                    getField(i,n) == getField(i-3, n - 3)) {
+
+                winner = getField(i,n);
+                gameWon(winner);
+                return;
+            }
+
+            if(getField(i,n) != TicTacToeModel::NoPlayer && getField(i,n) == getField(i - 1, n + 1) && getField(i - 2, n + 2) == getField(i,n) &&
+                    getField(i,n) == getField(i-3, n + 3)) {
+
+                winner = getField(i,n);
+                gameWon(winner);
+                return;
             }
         }
 
         n++;
-    }
-
-    if(winner != TicTacToeModel::NoPlayer) {
-
-        gameWon(winner);
     }
 
     if(steps >= tableColumns * tableRows) {
@@ -128,7 +157,7 @@ TicTacToeModel::Player TicTacToeModel::getField(int x, int y) const
 
 bool TicTacToeModel::loadGame(int gameIndex)
 {
-    QVector<int> saveGameData;
+    QVector<int> saveGameData(tableColumns * tableRows + 2);
 
     if (!dataAccess.loadGame(gameIndex, saveGameData)) // az adatelérés végzi a tevékenységeket
         return false;

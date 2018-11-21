@@ -36,7 +36,7 @@ bool TicTacToeData::loadGame(int gameIndex, QVector<int> &saveGameData)
 
     QTextStream stream(&file);
 
-    saveGameData.resize(42);
+    //saveGameData.resize(42);
 
     // soronként beolvassuk az adatokat a fájlból
     for (int i = 0; i < saveGameData.size(); i++)
