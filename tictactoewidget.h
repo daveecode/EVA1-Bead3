@@ -1,7 +1,7 @@
 #ifndef TICTACTOEWIDGET_H
 #define TICTACTOEWIDGET_H
 #include "tictactoemodel.h"
-#include "datadb.h"
+#include "tictactoedata.h"
 #include "savewidget.h"
 #include "loadwidget.h"
 #include <QWidget>
@@ -48,7 +48,7 @@ private:
     QHBoxLayout *labels;
 
     TicTacToeModel *model;
-    DataDb *data;
+    TicTacToeData *data;
     SaveWidget *saveGameWidget;
     LoadWidget *loadGameWidget;
 

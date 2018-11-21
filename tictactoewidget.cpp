@@ -5,9 +5,10 @@
 TicTacToeWidget::TicTacToeWidget(QWidget *parent) : QWidget(parent)
 {
 
-
-    data = new DataDb();
-    model = new TicTacToeModel(data);
+    saveGameWidget = NULL;
+    loadGameWidget = NULL;
+    data = new TicTacToeData;
+    model = new TicTacToeModel();
 
     /*setFixedSize(model->tableColumns * 100, model->tableRows * 100);
 

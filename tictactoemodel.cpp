@@ -1,9 +1,8 @@
 #include "tictactoemodel.h"
 
-TicTacToeModel::TicTacToeModel(DataUi *dataAccess, int columns, int rows)
+TicTacToeModel::TicTacToeModel(int columns, int rows)
 {
 
-    _dataAccess = dataAccess;
     tableColumns = columns;
     tableRows = rows;
 
@@ -129,54 +128,40 @@ TicTacToeModel::Player TicTacToeModel::getField(int x, int y) const
 
 bool TicTacToeModel::loadGame(int gameIndex)
 {
-    if(_dataAccess == NULL || !_dataAccess->isAvailable()) {
-
-        return false;
-    }
-
     QVector<int> saveGameData;
 
-    if(!_dataAccess->loadGame(gameIndex, saveGameData)) {
-
+    if (!dataAccess.loadGame(gameIndex, saveGameData)) // az adatelérés végzi a tevékenységeket
         return false;
-    }
 
+    // feldolgozttuk a kapott vektort
     steps = saveGameData[0];
     current = (Player)saveGameData[1];
-
-    for(int i = 0; i < tableColumns; ++i) {
-
-        for(int j = 0; j < tableRows; ++j) {
-
-            gameTable[i][j] = (Player)saveGameData[2+i*tableColumns+j];
+    for (int i = 0; i < tableColumns; ++i)
+        for (int j = 0; j < tableRows; ++j)
+        {
+            gameTable[i][j] = (Player)saveGameData[2 + i * tableRows + j];
         }
-    }
 
     return true;
 }
 
 bool TicTacToeModel::saveGame(int gameIndex)
 {
-    if (_dataAccess == NULL || !_dataAccess->isAvailable()) // ellenőrizzük az adatelérést
-        return false;
-
     QVector<int> saveGameData;
 
+    // összerakjuk a megfelelő tartalmat
     saveGameData.push_back(steps);
     saveGameData.push_back((int)current);
-
-    for(int i = 0; i < tableColumns; ++i) {
-
-        for(int j = 0; j < tableRows; ++j) {
-
+    for (int i = 0; i < tableColumns; ++i)
+        for (int j = 0; j < tableRows; ++j)
+        {
             saveGameData.push_back((int)gameTable[i][j]);
         }
-    }
 
-    return _dataAccess->saveGame(gameIndex, saveGameData);
+    return dataAccess.saveGame(gameIndex, saveGameData); // az adatelérés végzi a tevékenységeket
 }
 
 QVector<QString> TicTacToeModel::saveGameList() const
 {
-    return _dataAccess->saveGameList();
+    return dataAccess.saveGameList();
 }

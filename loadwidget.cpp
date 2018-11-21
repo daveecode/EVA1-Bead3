@@ -7,7 +7,7 @@ LoadWidget::LoadWidget(QWidget *parent) : SaveWidget(parent)
 
     // ellenőrzést is végzünnk az OK gomb lenyomására
     disconnect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(okButton, SIGNAL(clicked()), this, SLOT(okButton_Clicked()));
+    connect(okButton, SIGNAL(clicked()), this, SLOT(Clicked()));
 }
 
 void LoadWidget::Clicked()
