@@ -18,6 +18,7 @@ public:
 private slots:
 
     void sendData();
+    void sizeSlot();
 
 private:
 

@@ -1,4 +1,5 @@
 #include "tictactoewidget.h"
+#include "filedb.h"
 #include <QMessageBox>
 
 TicTacToeWidget::TicTacToeWidget(QWidget *parent) : QWidget(parent)
@@ -6,12 +7,13 @@ TicTacToeWidget::TicTacToeWidget(QWidget *parent) : QWidget(parent)
 
     saveGameWidget = NULL;
     loadGameWidget = NULL;
-    data = new TicTacToeData;
-    model = new TicTacToeModel();
+    data = new FileDb();
+    model = new TicTacToeModel(data);
 
     newGame(model->tableColumns, model->tableRows);
 
     connect(model, SIGNAL(fieldChanged(int,int,TicTacToeModel::Player)), this, SLOT(model_fieldChanged(int,int,TicTacToeModel::Player)));
+    connect(model, SIGNAL(changeTable()), this, SLOT(model_changeTable()));
     connect(model, SIGNAL(gameWon(TicTacToeModel::Player)), this, SLOT(model_GameWon(TicTacToeModel::Player)));
     connect(model, SIGNAL(gameOver()), this, SLOT(model_GameOver()));
 }
@@ -149,6 +151,12 @@ void TicTacToeWidget::loadGame()
 void TicTacToeWidget::model_fieldChanged(int x, int y, TicTacToeModel::Player player)
 {
     update();
+}
+
+void TicTacToeWidget::model_changeTable()
+{
+    newGame(model->tableColumns, model->tableRows);
+    sendSize();
 }
 
 void TicTacToeWidget::model_GameWon(TicTacToeModel::Player winner)

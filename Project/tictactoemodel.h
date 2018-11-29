@@ -2,7 +2,7 @@
 #define TICTACTOEMODEL_H
 
 #include <QObject>
-#include "tictactoedata.h"
+#include "dataui.h"
 
 class TicTacToeModel : public QObject
 {
@@ -12,7 +12,7 @@ public:
 
     enum Player { NoPlayer, XPlayer, OPlayer, None };
 
-    explicit TicTacToeModel(int columns = 8, int rows = 5);
+    explicit TicTacToeModel(TicTacToeData *data, int columns = 8, int rows = 5);
     virtual ~TicTacToeModel(); //nem feltétlen kell definiálni
 
     void newGame(int c, int r);
@@ -32,11 +32,12 @@ signals:
     void gameOver();
     void gameWon(TicTacToeModel::Player winner);
     void fieldChanged(int x, int y, TicTacToeModel::Player player);
+    void changeTable();
 
 private:
 
     Player **gameTable;
-    TicTacToeData dataAccess;
+    TicTacToeData *dataAccess;
 
     void checkGame();
 

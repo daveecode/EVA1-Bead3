@@ -1,7 +1,8 @@
 #ifndef TICTACTOEWIDGET_H
 #define TICTACTOEWIDGET_H
 #include "tictactoemodel.h"
-#include "tictactoedata.h"
+#include "dataui.h"
+#include "filedb.h"
 #include "savewidget.h"
 #include "loadwidget.h"
 #include <QWidget>
@@ -23,6 +24,10 @@ protected:
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *event);
 
+signals:
+
+    void sendSize();
+
 public slots:
 
     void newGame(int c, int r);
@@ -36,6 +41,7 @@ private slots:
     void model_GameWon(TicTacToeModel::Player winner);
     void model_GameOver();
     void model_fieldChanged(int x, int y, TicTacToeModel::Player player);
+    void model_changeTable();
 
 private:
 

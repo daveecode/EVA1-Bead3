@@ -60,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(configGameAction, SIGNAL(triggered(bool)), this, SLOT(sendData()));
     connect(saveGameAction, SIGNAL(triggered(bool)), widget, SLOT(setSave()));
     connect(loadGameAction, SIGNAL(triggered(bool)), widget, SLOT(setLoad()));
+    connect(widget, SIGNAL(sendSize()), this, SLOT(sizeSlot()));
 }
 
 MainWindow::~MainWindow()
@@ -83,4 +84,9 @@ void MainWindow::sendData()
     setFixedSize(widget->width(), widget->height() + menuBar()->height() + statusBar()->height());
     firstLabel->setText(trUtf8("X játékos: ") + dialog->firstPlayerName());
     secondLabel->setText(trUtf8("O játékos: ") + dialog->secondPlayerName());
+}
+
+void MainWindow::sizeSlot()
+{
+    setFixedSize(widget->width(), widget->height() + menuBar()->height() + statusBar()->height());
 }

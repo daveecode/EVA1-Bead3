@@ -1,8 +1,9 @@
 #include "tictactoemodel.h"
 
-TicTacToeModel::TicTacToeModel(int columns, int rows)
+TicTacToeModel::TicTacToeModel(TicTacToeData *data, int columns, int rows)
 {
 
+    dataAccess = data;
     tableColumns = columns;
     tableRows = rows;
 
@@ -157,17 +158,44 @@ TicTacToeModel::Player TicTacToeModel::getField(int x, int y) const
 
 bool TicTacToeModel::loadGame(int gameIndex)
 {
-    QVector<int> saveGameData(tableColumns * tableRows + 2);
+    QVector<int> saveGameData(tableColumns * tableRows + 3);
 
-    if (!dataAccess.loadGame(gameIndex, saveGameData))
+    if (!dataAccess->loadGame(gameIndex, saveGameData))
         return false;
 
-    steps = saveGameData[0];
-    current = (Player)saveGameData[1];
+    tableColumns = saveGameData[0];
+
+    switch (tableColumns)
+    {
+
+    case 8:
+
+        tableRows = 5;
+        newGame(8,5);
+        changeTable();
+        break;
+
+    case 10:
+
+        tableRows = 6;
+        newGame(10,6);
+        changeTable();
+        break;
+
+    case 12:
+
+        tableRows = 7;
+        newGame(12,7);
+        changeTable();
+        break;
+    }
+
+    steps = saveGameData[1];
+    current = (Player)saveGameData[2];
     for (int i = 0; i < tableColumns; ++i)
         for (int j = 0; j < tableRows; ++j)
         {
-            gameTable[i][j] = (Player)saveGameData[2 + i * tableRows + j];
+            gameTable[i][j] = (Player)saveGameData[3 + i * tableRows + j];
         }
 
     return true;
@@ -176,7 +204,8 @@ bool TicTacToeModel::loadGame(int gameIndex)
 bool TicTacToeModel::saveGame(int gameIndex)
 {
     QVector<int> saveGameData;
-
+    /// legyen a saveGameData[0] a méret
+    saveGameData.push_back(tableColumns);
     saveGameData.push_back(steps);
     saveGameData.push_back((int)current);
     for (int i = 0; i < tableColumns; ++i)
@@ -185,10 +214,10 @@ bool TicTacToeModel::saveGame(int gameIndex)
             saveGameData.push_back((int)gameTable[i][j]);
         }
 
-    return dataAccess.saveGame(gameIndex, saveGameData);
+    return dataAccess->saveGame(gameIndex, saveGameData);
 }
 
 QVector<QString> TicTacToeModel::saveGameList() const
 {
-    return dataAccess.saveGameList();
+    return dataAccess->saveGameList();
 }
